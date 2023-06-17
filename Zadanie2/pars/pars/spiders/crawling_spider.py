@@ -3,18 +3,17 @@ from scrapy.linkextractors import LinkExtractor
 
 class CrawlingSpider(CrawlSpider):
     name = "practica"
-    allowed_domains = ["iisraeldefense.co.il"]
-    start_urls =["https://www.israeldefense.co.il/"]
+    allowed_domains = ["i-hls.com"]
+    start_urls =["https://i-hls.com/"]
 
     rules = (
-        Rule(LinkExtractor(allow= "en/categories/cybertech")),
-        Rule(LinkExtractor(allow="en/categories", deny="cybertech"), callback="parse_item")
+        Rule(LinkExtractor(allow= "iHLS/news")),
+        Rule(LinkExtractor(allow="iHLS", deny="news"), callback="parse_item")
     )
 
     def parse_item(self, response):
         yield {
-            "title": response.css(".page_title title h1::text").get(),
-            "date": response.css(".created_date::text").get(),
-            "page_text": response.css(".rtejustify::text").get(),
-            "author": response.css(".author_name::text").get()
+            "title": response.css(".entry-title a::text").get(),
+            "date": response.css(".meta-info time::text").get(),
+            "page_text": response.css(".td-post-text-excerpt::text").get()
         }
