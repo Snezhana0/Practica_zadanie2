@@ -1,3 +1,6 @@
+import logging
+from distutils.log import Log
+
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
@@ -12,6 +15,8 @@ class CrawlingSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
+        logging.info("работа парсера")
+
         yield {
             "title": response.css(".entry-title a::text").get(),
             "date": response.css(".meta-info time::text").get(),
